@@ -1,0 +1,74 @@
+name: Trigger Bot
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'   # every 6h
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+  trigger:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Make bac-bot public
+        run: |
+          curl -s -X PATCH \
+            -H "Authorization: Bearer ${{ secrets.PAT_TOKEN }}" \
+            -H "Accept: application/vnd.github+json" \
+            https://api.github.com/repos/rai4it/bac-bot \
+            -d '{"private": false}'
+
+      - name: Cancel running bot jobs
+        run: |
+          RUNS=$(curl -s \
+            -H "Authorization: Bearer ${{ secrets.PAT_TOKEN }}" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/rai4it/bac-bot/actions/workflows/bot.yml/runs?status=in_progress&per_page=5")
+          echo "$RUNS" | python3 -c "
+          import json,sys
+          runs = json.load(sys.stdin).get('workflow_runs', [])
+          for r in runs: print(r['id'])
+          " | while read id; do
+            curl -s -X POST \
+              -H "Authorization: Bearer ${{ secrets.PAT_TOKEN }}" \
+              -H "Accept: application/vnd.github+json" \
+              "https://api.github.com/repos/rai4it/bac-bot/actions/runs/$id/cancel"
+            echo "Cancelled run $id"
+          done
+          sleep 10
+
+      - name: Trigger bot workflow
+        run: |
+          curl -s -X POST \
+            -H "Authorization: Bearer ${{ secrets.PAT_TOKEN }}" \
+            -H "Accept: application/vnd.github+json" \
+            https://api.github.com/repos/rai4it/bac-bot/actions/workflows/bot.yml/dispatches \
+            -d '{"ref": "main"}'
+
+      - name: Wait for bot to start
+        run: |
+          for i in $(seq 1 24); do
+            sleep 10
+            STATUS=$(curl -s \
+              -H "Authorization: Bearer ${{ secrets.PAT_TOKEN }}" \
+              -H "Accept: application/vnd.github+json" \
+              "https://api.github.com/repos/rai4it/bac-bot/actions/workflows/bot.yml/runs?per_page=1" \
+              | python3 -c "import json,sys; runs=json.load(sys.stdin).get('workflow_runs',[]); print(runs[0]['status'] if runs else 'none')")
+            echo "Status: $STATUS"
+            if [ "$STATUS" = "in_progress" ]; then
+              echo "Bot is running!"
+              break
+            fi
+          done
+
+      - name: Make bac-bot private again
+        if: always()
+        run: |
+          curl -s -X PATCH \
+            -H "Authorization: Bearer ${{ secrets.PAT_TOKEN }}" \
+            -H "Accept: application/vnd.github+json" \
+            https://api.github.com/repos/rai4it/bac-bot \
+            -d '{"private": true}'
+          echo "Repo is private again."
