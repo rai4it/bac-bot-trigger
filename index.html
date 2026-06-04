@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>بكالوريا جي بي تي — مساعدك الذكي</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #0a0a1a;
+      color: #e0e0e0;
+      min-height: 100vh;
+    }
+
+    /* Hero */
+    .hero {
+      background: linear-gradient(135deg, #0d0d2b 0%, #1a237e 50%, #0d0d2b 100%);
+      padding: 80px 20px 60px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(57,73,171,0.3), transparent);
+      top: -100px; left: 50%;
+      transform: translateX(-50%);
+      border-radius: 50%;
+    }
+    .logo { font-size: 5rem; margin-bottom: 16px; }
+    .hero h1 {
+      font-size: 2.4rem;
+      color: #fff;
+      margin-bottom: 12px;
+      font-weight: 700;
+    }
+    .hero p {
+      font-size: 1.15rem;
+      color: #9fa8da;
+      max-width: 500px;
+      margin: 0 auto 36px;
+      line-height: 1.7;
+    }
+    .cta-btn {
+      display: inline-block;
+      background: linear-gradient(135deg, #3949ab, #5c6bc0);
+      color: #fff;
+      padding: 16px 40px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-size: 1.1rem;
+      font-weight: 700;
+      box-shadow: 0 4px 20px rgba(57,73,171,0.5);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .cta-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 28px rgba(57,73,171,0.7);
+    }
+    .cta-sub {
+      margin-top: 14px;
+      color: #7986cb;
+      font-size: 0.9rem;
+    }
+
+    /* Features */
+    .features {
+      max-width: 900px;
+      margin: 60px auto;
+      padding: 0 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+    .card {
+      background: #12122a;
+      border-radius: 14px;
+      padding: 28px 24px;
+      border: 1px solid #1e1e3a;
+      text-align: center;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .card:hover { transform: translateY(-4px); border-color: #3949ab; }
+    .card .icon { font-size: 2.4rem; margin-bottom: 14px; }
+    .card h3 { color: #fff; font-size: 1.05rem; margin-bottom: 8px; }
+    .card p { color: #9e9e9e; font-size: 0.9rem; line-height: 1.6; }
+
+    /* Subjects */
+    .subjects {
+      background: #0d0d22;
+      padding: 50px 20px;
+      text-align: center;
+    }
+    .subjects h2 { color: #7986cb; font-size: 1.4rem; margin-bottom: 30px; }
+    .subject-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    .subject-tag {
+      background: #1a1a2e;
+      border: 1px solid #3949ab;
+      color: #c5cae9;
+      padding: 10px 20px;
+      border-radius: 20px;
+      font-size: 0.95rem;
+    }
+
+    /* How it works */
+    .how {
+      max-width: 700px;
+      margin: 60px auto;
+      padding: 0 20px;
+      text-align: center;
+    }
+    .how h2 { color: #7986cb; font-size: 1.4rem; margin-bottom: 30px; }
+    .steps { display: flex; flex-direction: column; gap: 16px; }
+    .step {
+      background: #12122a;
+      border-radius: 12px;
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      text-align: right;
+      border: 1px solid #1e1e3a;
+    }
+    .step-num {
+      background: #3949ab;
+      color: #fff;
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .step p { color: #bdbdbd; font-size: 0.95rem; line-height: 1.6; }
+
+    /* CTA bottom */
+    .cta-bottom {
+      background: linear-gradient(135deg, #1a237e, #283593);
+      padding: 60px 20px;
+      text-align: center;
+    }
+    .cta-bottom h2 { color: #fff; font-size: 1.6rem; margin-bottom: 12px; }
+    .cta-bottom p { color: #9fa8da; margin-bottom: 28px; }
+
+    /* Footer */
+    footer {
+      background: #080814;
+      padding: 24px 20px;
+      text-align: center;
+      color: #424242;
+      font-size: 0.85rem;
+    }
+    footer a { color: #5c6bc0; text-decoration: none; }
+    footer a:hover { color: #7986cb; }
+  </style>
+</head>
+<body>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="logo">🎓</div>
+  <h1>بكالوريا جي بي تي</h1>
+  <p>مساعدك الذكي لطلاب الصف الثاني عشر — يجيب من الكتب المدرسية الرسمية</p>
+  <a class="cta-btn" href="https://t.me/baccalaureate_gpt_bot">🚀 ابدأ الآن على تيليغرام</a>
+  <p class="cta-sub">مجاني · لا يحتاج تسجيل</p>
+</section>
+
+<!-- Features -->
+<div class="features">
+  <div class="card">
+    <div class="icon">💬</div>
+    <h3>اسأل بأي طريقة</h3>
+    <p>اكتب سؤالك نصاً، أرسل تسجيلاً صوتياً، أو صوّر ورقة الامتحان</p>
+  </div>
+  <div class="card">
+    <div class="icon">📚</div>
+    <h3>إجابات من الكتاب</h3>
+    <p>كل إجابة مستخرجة من محتوى الكتب المدرسية السورية الرسمية</p>
+  </div>
+  <div class="card">
+    <div class="icon">⚡</div>
+    <h3>فوري ودقيق</h3>
+    <p>إجابة كاملة في ثوانٍ، متاح 24/7 في أي وقت تحتاجه</p>
+  </div>
+</div>
+
+<!-- Subjects -->
+<section class="subjects">
+  <h2>📖 المواد المدعومة</h2>
+  <div class="subject-grid">
+    <span class="subject-tag">🧬 الأحياء</span>
+    <span class="subject-tag">⚡ الفيزياء</span>
+    <span class="subject-tag">📖 اللغة العربية</span>
+    <span class="subject-tag">🇬🇧 اللغة الإنجليزية</span>
+    <span class="subject-tag">🇫🇷 اللغة الفرنسية</span>
+    <span class="subject-tag">🌍 الجغرافيا</span>
+    <span class="subject-tag">🧠 الفلسفة</span>
+  </div>
+</section>
+
+<!-- How it works -->
+<section class="how">
+  <h2>🔧 كيف يعمل؟</h2>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <p>افتح البوت على تيليغرام واضغط <strong>Start</strong></p>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <p>اكتب سؤالك أو أرسل صورة ورقة الامتحان أو رسالة صوتية</p>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <p>احصل على إجابة كاملة ومفصلة من الكتاب المدرسي في ثوانٍ</p>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Bottom -->
+<section class="cta-bottom">
+  <h2>جاهز تبدأ؟ 🚀</h2>
+  <p>انضم لآلاف الطلاب الذين يستخدمون بكالوريا جي بي تي</p>
+  <a class="cta-btn" href="https://t.me/baccalaureate_gpt_bot">ابدأ الآن مجاناً</a>
+</section>
+
+<!-- Footer -->
+<footer>
+  <p>
+    © 2026 بكالوريا جي بي تي ·
+    <a href="https://t.me/baccalaureate_gpt_bot">البوت</a> ·
+    <a href="https://t.me/bac_gpt_support">الدعم الفني</a> ·
+    <a href="privacy.html">سياسة الخصوصية</a> ·
+    <a href="https://www.facebook.com/BaccalaureateGPT/">فيسبوك</a>
+  </p>
+</footer>
+
+</body>
+</html>
