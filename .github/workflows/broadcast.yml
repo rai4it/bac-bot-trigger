@@ -25,7 +25,7 @@ jobs:
     steps:
       - name: Make bac-bot public
         run: |
-          curl -s -X PATCH \
+          curl -s -o /dev/null -X PATCH \
             -H "Authorization: Bearer ${{ secrets.PAT_TOKEN }}" \
             -H "Accept: application/vnd.github+json" \
             https://api.github.com/repos/rai4it/bac-bot \
