@@ -1,0 +1,39 @@
+name: Broadcast Message
+
+on:
+  workflow_dispatch:
+    inputs:
+      message:
+        description: "Message to broadcast (Arabic supported)"
+        required: true
+        type: string
+      audience:
+        description: "Who to send to"
+        required: true
+        type: choice
+        default: test
+        options:
+          - test
+          - whitelist
+          - all
+
+jobs:
+  broadcast:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Dispatch broadcast to private repo
+        run: |
+          curl -s -X POST \
+            -H "Authorization: Bearer ${{ secrets.PAT_TOKEN }}" \
+            -H "Accept: application/vnd.github+json" \
+            https://api.github.com/repos/rai4it/bac-bot/actions/workflows/broadcast.yml/dispatches \
+            -d '{
+              "ref": "main",
+              "inputs": {
+                "message": ${{ toJSON(inputs.message) }},
+                "audience": "${{ inputs.audience }}"
+              }
+            }'
+          echo "✅ Broadcast dispatched — audience: ${{ inputs.audience }}"
