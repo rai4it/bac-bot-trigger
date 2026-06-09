@@ -20,20 +20,39 @@ on:
 jobs:
   broadcast:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 10
 
     steps:
-      - name: Dispatch broadcast to private repo
+      - name: Make bac-bot public
         run: |
-          curl -s -X POST \
+          curl -s -X PATCH \
             -H "Authorization: Bearer ${{ secrets.PAT_TOKEN }}" \
             -H "Accept: application/vnd.github+json" \
-            https://api.github.com/repos/rai4it/bac-bot/actions/workflows/broadcast.yml/dispatches \
-            -d '{
-              "ref": "main",
-              "inputs": {
-                "message": ${{ toJSON(inputs.message) }},
-                "audience": "${{ inputs.audience }}"
-              }
-            }'
-          echo "✅ Broadcast dispatched — audience: ${{ inputs.audience }}"
+            https://api.github.com/repos/rai4it/bac-bot \
+            -d '{"private": false}'
+
+      - name: Checkout private repo
+        uses: actions/checkout@v4
+        with:
+          repository: rai4it/bac-bot
+          token: ${{ secrets.PAT_TOKEN }}
+
+      - name: Install dependencies
+        run: python3 -m pip install --no-cache-dir python-telegram-bot python-dotenv
+
+      - name: Run broadcast
+        env:
+          TELEGRAM_TOKEN_PROD: ${{ secrets.TELEGRAM_TOKEN_PROD }}
+          BROADCAST_MESSAGE:   ${{ inputs.message }}
+          BROADCAST_AUDIENCE:  ${{ inputs.audience }}
+        run: python3 broadcast.py
+
+      - name: Make bac-bot private again
+        if: always()
+        run: |
+          curl -s -X PATCH \
+            -H "Authorization: Bearer ${{ secrets.PAT_TOKEN }}" \
+            -H "Accept: application/vnd.github+json" \
+            https://api.github.com/repos/rai4it/bac-bot \
+            -d '{"private": true}'
+          echo "Repo is private again."
