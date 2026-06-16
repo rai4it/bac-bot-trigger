@@ -28,13 +28,13 @@ jobs:
           curl -s -o /dev/null -X PATCH \
             -H "Authorization: Bearer ${{ secrets.PAT_TOKEN }}" \
             -H "Accept: application/vnd.github+json" \
-            https://api.github.com/repos/rai4it/bac-bot \
+            https://api.github.com/repos/${{ secrets.TARGET_REPO }} \
             -d '{"private": false}'
 
       - name: Checkout private repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.2.2
         with:
-          repository: rai4it/bac-bot
+          repository: ${{ secrets.TARGET_REPO }}
           token: ${{ secrets.PAT_TOKEN }}
 
       - name: Install dependencies
@@ -50,9 +50,8 @@ jobs:
       - name: Make bac-bot private again
         if: always()
         run: |
-          curl -s -X PATCH \
+          curl -s -o /dev/null -X PATCH \
             -H "Authorization: Bearer ${{ secrets.PAT_TOKEN }}" \
             -H "Accept: application/vnd.github+json" \
-            https://api.github.com/repos/rai4it/bac-bot \
+            https://api.github.com/repos/${{ secrets.TARGET_REPO }} \
             -d '{"private": true}'
-          echo "Repo is private again."
