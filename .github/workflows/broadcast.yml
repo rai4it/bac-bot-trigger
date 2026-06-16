@@ -23,7 +23,7 @@ jobs:
     timeout-minutes: 10
 
     steps:
-      - name: Make bac-bot public
+      - name: Make repo public
         run: |
           curl -s -o /dev/null -X PATCH \
             -H "Authorization: Bearer ${{ secrets.PAT_TOKEN }}" \
@@ -47,7 +47,7 @@ jobs:
           BROADCAST_AUDIENCE:  ${{ inputs.audience }}
         run: python3 broadcast.py
 
-      - name: Make bac-bot private again
+      - name: Make repo private again
         if: always()
         run: |
           curl -s -o /dev/null -X PATCH \
